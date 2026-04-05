@@ -14,8 +14,8 @@ class MainActivity : AppCompatActivity() {
         ui = ActivityMainBinding.inflate(layoutInflater)
         setContentView(ui.root)
 
-        ui.fabNewHouse.setOnClickListener {
-            Toast.makeText(this, "Add House clicked", Toast.LENGTH_SHORT).show()
+        ui.btnNewHouse.setOnClickListener {
+            Toast.makeText(this, "New House clicked", Toast.LENGTH_SHORT).show()
         }
     }
 }
