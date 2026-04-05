@@ -16,6 +16,12 @@ Assignment 2 - Android Application
 - Confirmed Firestore write test successfully
 - Pushed project to GitHub
 
+### Stage 2
+- Created House data class
+- Replaced starter screen with House List empty-state screen
+- Added Floating Action Button for creating a new house
+- Confirmed Add button click interaction with Toast message
+
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
 
