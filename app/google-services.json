@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1026782844703",
+    "project_id": "interiorquoteapp-e36f0",
+    "storage_bucket": "interiorquoteapp-e36f0.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1026782844703:android:00463e88d5e4ff36d5422a",
+        "android_client_info": {
+          "package_name": "au.edu.utas.KIT721_760151.interiorquoteapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAsydppSVgX7gnkiX8IBvSX77TNWFtMYbk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
