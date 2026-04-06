@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.InteriorQuoteApp">
         <activity
+            android:name=".AddEditHouseActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:screenOrientation="portrait">

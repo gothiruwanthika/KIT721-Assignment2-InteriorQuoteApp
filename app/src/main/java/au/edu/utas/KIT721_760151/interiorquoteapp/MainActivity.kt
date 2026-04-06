@@ -1,5 +1,6 @@
 package au.edu.utas.KIT721_760151.interiorquoteapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -15,7 +16,8 @@ class MainActivity : AppCompatActivity() {
         setContentView(ui.root)
 
         ui.btnNewHouse.setOnClickListener {
-            Toast.makeText(this, "New House clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, AddEditHouseActivity::class.java)
+            startActivity(intent)
         }
     }
 }
