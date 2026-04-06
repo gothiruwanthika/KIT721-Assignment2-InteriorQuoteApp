@@ -40,6 +40,15 @@ Assignment 2 - Android Application
 - Implemented RecyclerView for house list display
 - Created HouseAdapter and house_item layout
 - Switched between empty state and house list state depending on available data
+
+### Stage 5
+- Created HouseDetailsActivity
+- Passed selected house data from MainActivity
+- Displayed customer name and address on House Details screen
+- Added back navigation, Edit button placeholder, Add Room button, and Generate Quote button
+
+
+
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
 
