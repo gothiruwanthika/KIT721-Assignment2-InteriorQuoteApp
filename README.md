@@ -22,6 +22,14 @@ Assignment 2 - Android Application
 - Added Floating Action Button for creating a new house
 - Confirmed Add button click interaction with Toast message
 
+
+### Stage 3
+- Created AddEditHouseActivity
+- Built New House form screen
+- Connected New House button to open the form
+- Added validation for required fields
+- Confirmed valid form submission flow
+
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
 
