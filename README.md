@@ -34,6 +34,12 @@ Assignment 2 - Android Application
 - Added 10-digit contact number validation
 - Added back navigation on Add House screen
 
+### Stage 4
+- Saved house data to Firebase Firestore
+- Loaded saved houses from Firestore in MainActivity
+- Implemented RecyclerView for house list display
+- Created HouseAdapter and house_item layout
+- Switched between empty state and house list state depending on available data
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
 
