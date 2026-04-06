@@ -29,6 +29,10 @@ Assignment 2 - Android Application
 - Connected New House button to open the form
 - Added validation for required fields
 - Confirmed valid form submission flow
+- Improved Add House form to better match prototype
+- Added inline validation messages
+- Added 10-digit contact number validation
+- Added back navigation on Add House screen
 
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
