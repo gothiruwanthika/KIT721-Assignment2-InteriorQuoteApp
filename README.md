@@ -47,6 +47,13 @@ Assignment 2 - Android Application
 - Displayed customer name and address on House Details screen
 - Added back navigation, Edit button placeholder, Add Room button, and Generate Quote button
 
+### Stage 6
+- Created AddEditRoomActivity
+- Built Add Room form based on prototype
+- Added room validation for name and labour cost
+- Passed houseId from HouseDetailsActivity to AddEditRoomActivity
+- Saved rooms under each house in Firestore subcollections
+- Loaded and displayed rooms in HouseDetailsActivity using RecyclerView
 
 
 ## Test Device / Emulator
