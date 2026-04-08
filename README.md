@@ -54,6 +54,9 @@ Assignment 2 - Android Application
 - Passed houseId from HouseDetailsActivity to AddEditRoomActivity
 - Saved rooms under each house in Firestore subcollections
 - Loaded and displayed rooms in HouseDetailsActivity using RecyclerView
+- Added room include/exclude checkbox on House Details screen
+- Saved includedInQuote state to Firestore
+- Matched updated prototype for room selection before quote generation
 
 
 ## Test Device / Emulator
