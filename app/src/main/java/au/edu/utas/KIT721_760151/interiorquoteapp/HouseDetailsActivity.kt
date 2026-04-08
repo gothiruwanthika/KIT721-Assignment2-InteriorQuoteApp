@@ -61,9 +61,15 @@ class HouseDetailsActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        roomAdapter = RoomAdapter(roomList) { selectedRoom ->
-            Toast.makeText(this, "Selected room: ${selectedRoom.name}", Toast.LENGTH_SHORT).show()
-        }
+        roomAdapter = RoomAdapter(
+            rooms = roomList,
+            onRoomClick = { selectedRoom ->
+                Toast.makeText(this, "Selected room: ${selectedRoom.name}", Toast.LENGTH_SHORT).show()
+            },
+            onRoomCheckedChanged = { selectedRoom, isChecked ->
+                updateRoomIncludedInQuote(selectedRoom, isChecked)
+            }
+        )
 
         ui.recyclerRooms.apply {
             layoutManager = LinearLayoutManager(this@HouseDetailsActivity)
@@ -100,6 +106,18 @@ class HouseDetailsActivity : AppCompatActivity() {
                 ui.tvNoRooms.visibility = View.VISIBLE
                 ui.recyclerRooms.visibility = View.GONE
                 Toast.makeText(this, "Error loading rooms: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun updateRoomIncludedInQuote(room: Room, isChecked: Boolean) {
+        val db = Firebase.firestore
+
+        db.collection("houses").document(houseId)
+            .collection("rooms")
+            .document(room.id)
+            .update("includedInQuote", isChecked)
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error updating room selection: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 }

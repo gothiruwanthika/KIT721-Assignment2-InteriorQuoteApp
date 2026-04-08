@@ -10,9 +10,15 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:gravity="center_vertical"
         android:orientation="horizontal"
-        android:padding="16dp"
-        android:gravity="center_vertical">
+        android:padding="16dp">
+
+        <CheckBox
+            android:id="@+id/cbIncludeRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="12dp" />
 
         <LinearLayout
             android:layout_width="0dp"
@@ -32,18 +38,19 @@
                 android:id="@+id/tvRoomDetails"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Labour Cost: $50 | no windows | no floors"
-                android:textSize="15sp"
-                android:layout_marginTop="8dp" />
+                android:layout_marginTop="8dp"
+                android:text="Windows: 2 | Floor: 1"
+                android:textSize="15sp" />
 
         </LinearLayout>
 
         <TextView
+            android:id="@+id/tvArrow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="›"
-            android:textSize="28sp"
-            android:textColor="#999999" />
+            android:textColor="#999999"
+            android:textSize="28sp" />
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

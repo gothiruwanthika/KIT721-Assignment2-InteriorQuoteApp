@@ -71,7 +71,8 @@ class AddEditRoomActivity : AppCompatActivity() {
         val roomData = hashMapOf(
             "name" to roomName,
             "labourCost" to labourCost,
-            "houseId" to houseId
+            "houseId" to houseId,
+            "includedInQuote" to true
         )
 
         val db = Firebase.firestore
