@@ -66,6 +66,13 @@ Assignment 2 - Android Application
 - Added placeholders for room photo, windows, and floor spaces
 - Added Edit, Add Window, Add Floor Space, and Delete buttons
 
+### Stage 8
+- Created AddEditWindowActivity
+- Built Add Window form with validation for name, width, and height
+- Added required selected product field to match prototype
+- Created SelectProductActivity for basic product selection
+- Returned selected product from SelectProductActivity to AddEditWindowActivity
+- Saved windows under the correct room in Firestore
 
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
