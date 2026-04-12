@@ -73,6 +73,7 @@ Assignment 2 - Android Application
 - Created SelectProductActivity for basic product selection
 - Returned selected product from SelectProductActivity to AddEditWindowActivity
 - Saved windows under the correct room in Firestore
+- Displayed saved windows in RoomDetailsActivity using RecyclerView
 
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
