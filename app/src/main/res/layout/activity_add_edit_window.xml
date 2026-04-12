@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp">
+
+            <ImageButton
+                android:id="@+id/btnBack"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_alignParentStart="true"
+                android:background="@android:color/transparent"
+                android:src="@android:drawable/ic_media_previous"
+                android:contentDescription="Back" />
+
+            <TextView
+                android:id="@+id/tvTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="New Window"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <Button
+                android:id="@+id/btnSaveWindow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:text="Save" />
+        </RelativeLayout>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Window Name *"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etWindowName"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="e.g., Window 1"
+            android:inputType="textCapWords"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvWindowNameError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Window name is required"
+            android:textColor="#D32F2F"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Width (mm) *"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etWindowWidth"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="e.g., 1200"
+            android:inputType="number"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvWindowWidthError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Width is required"
+            android:textColor="#D32F2F"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Height (mm) *"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <EditText
+            android:id="@+id/etWindowHeight"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:hint="e.g., 1500"
+            android:inputType="number"
+            android:layout_marginTop="8dp" />
+
+        <TextView
+            android:id="@+id/tvWindowHeightError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Height is required"
+            android:textColor="#D32F2F"
+            android:visibility="gone"
+            android:layout_marginBottom="16dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Selected product *"
+            android:textStyle="bold"
+            android:textSize="18sp" />
+
+        <LinearLayout
+            android:id="@+id/layoutSelectedProduct"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:drawable/edit_text"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="16dp"
+            android:clickable="true"
+            android:focusable="true">
+
+            <TextView
+                android:id="@+id/tvSelectedProduct"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="No product selected"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/tvProductArrow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="›"
+                android:textSize="28sp" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tvSelectedProductError"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Product is required"
+            android:textColor="#D32F2F"
+            android:visibility="gone"
+            android:layout_marginBottom="24dp" />
+
+    </LinearLayout>
+</ScrollView>
