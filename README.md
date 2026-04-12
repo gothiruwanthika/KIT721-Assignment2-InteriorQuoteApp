@@ -59,6 +59,14 @@ Assignment 2 - Android Application
 - Matched updated prototype for room selection before quote generation
 
 
+### Stage 7
+- Created RoomDetailsActivity
+- Passed selected room data from HouseDetailsActivity
+- Displayed room name and labour cost on Room Details screen
+- Added placeholders for room photo, windows, and floor spaces
+- Added Edit, Add Window, Add Floor Space, and Delete buttons
+
+
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
 
