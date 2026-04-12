@@ -64,7 +64,12 @@ class HouseDetailsActivity : AppCompatActivity() {
         roomAdapter = RoomAdapter(
             rooms = roomList,
             onRoomClick = { selectedRoom ->
-                Toast.makeText(this, "Selected room: ${selectedRoom.name}", Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, RoomDetailsActivity::class.java)
+                intent.putExtra("houseId", houseId)
+                intent.putExtra("roomId", selectedRoom.id)
+                intent.putExtra("roomName", selectedRoom.name)
+                intent.putExtra("labourCost", selectedRoom.labourCost)
+                startActivity(intent)
             },
             onRoomCheckedChanged = { selectedRoom, isChecked ->
                 updateRoomIncludedInQuote(selectedRoom, isChecked)
