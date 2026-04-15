@@ -15,6 +15,10 @@ class HouseDetailsActivity : AppCompatActivity() {
     private lateinit var ui: ActivityHouseDetailsBinding
     private var houseId: String = ""
 
+    private var customerName: String = ""
+    private var addressLine1: String = ""
+    private var city: String = ""
+
     private lateinit var roomAdapter: RoomAdapter
     private val roomList = mutableListOf<Room>()
 
@@ -24,9 +28,9 @@ class HouseDetailsActivity : AppCompatActivity() {
         setContentView(ui.root)
 
         houseId = intent.getStringExtra("houseId") ?: ""
-        val customerName = intent.getStringExtra("customerName") ?: ""
-        val addressLine1 = intent.getStringExtra("addressLine1") ?: ""
-        val city = intent.getStringExtra("city") ?: ""
+        customerName = intent.getStringExtra("customerName") ?: ""
+        addressLine1 = intent.getStringExtra("addressLine1") ?: ""
+        city = intent.getStringExtra("city") ?: ""
 
         ui.tvTitle.text = customerName
         ui.tvCustomerName.text = customerName
@@ -51,7 +55,12 @@ class HouseDetailsActivity : AppCompatActivity() {
         }
 
         ui.btnGenerateQuote.setOnClickListener {
-            Toast.makeText(this, "Generate Quote clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, QuoteActivity::class.java)
+            intent.putExtra("houseId", houseId)
+            intent.putExtra("customerName", customerName)
+            intent.putExtra("addressLine1", addressLine1)
+            intent.putExtra("city", city)
+            startActivity(intent)
         }
     }
 
