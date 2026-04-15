@@ -83,6 +83,21 @@ Assignment 2 - Android Application
 - Reused SelectProductActivity for floor product selection
 - Saved floor spaces under the correct room in Firestore
 - Displayed saved floor spaces in RoomDetailsActivity using RecyclerView
+
+### Stage 10
+- Created QuoteActivity
+- Connected Generate Quote button from HouseDetailsActivity
+- Loaded only included rooms into the quote
+- Displayed windows, floor spaces, labour cost, and room totals
+- Calculated final total quote
+- Added working share quote functionality
+
+
+
+
+
+
+
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
 
