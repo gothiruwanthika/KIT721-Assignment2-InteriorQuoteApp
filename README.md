@@ -75,6 +75,14 @@ Assignment 2 - Android Application
 - Saved windows under the correct room in Firestore
 - Displayed saved windows in RoomDetailsActivity using RecyclerView
 
+
+### Stage 9
+- Created AddEditFloorSpaceActivity
+- Built Add Floor Space form based on prototype
+- Added validation for floor space name, width, and length
+- Reused SelectProductActivity for floor product selection
+- Saved floor spaces under the correct room in Firestore
+- Displayed saved floor spaces in RoomDetailsActivity using RecyclerView
 ## Test Device / Emulator
 - Medium Phone API 35 Emulator
 
