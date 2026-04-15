@@ -19,6 +19,9 @@ class RoomDetailsActivity : AppCompatActivity() {
     private lateinit var windowAdapter: WindowAdapter
     private val windowList = mutableListOf<Window>()
 
+    private lateinit var floorSpaceAdapter: FloorSpaceAdapter
+    private val floorSpaceList = mutableListOf<FloorSpace>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         ui = ActivityRoomDetailsBinding.inflate(layoutInflater)
@@ -34,6 +37,7 @@ class RoomDetailsActivity : AppCompatActivity() {
         ui.tvLabourCost.text = "Labour cost: $$labourCost"
 
         setupWindowRecyclerView()
+        setupFloorSpaceRecyclerView()
 
         ui.btnBack.setOnClickListener {
             finish()
@@ -51,7 +55,10 @@ class RoomDetailsActivity : AppCompatActivity() {
         }
 
         ui.btnAddFloorSpace.setOnClickListener {
-            Toast.makeText(this, "Add Floor Space clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, AddEditFloorSpaceActivity::class.java)
+            intent.putExtra("houseId", houseId)
+            intent.putExtra("roomId", roomId)
+            startActivity(intent)
         }
 
         ui.btnDeleteRoom.setOnClickListener {
@@ -62,6 +69,7 @@ class RoomDetailsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         loadWindows()
+        loadFloorSpaces()
     }
 
     private fun setupWindowRecyclerView() {
@@ -72,6 +80,17 @@ class RoomDetailsActivity : AppCompatActivity() {
         ui.recyclerWindows.apply {
             layoutManager = LinearLayoutManager(this@RoomDetailsActivity)
             adapter = windowAdapter
+        }
+    }
+
+    private fun setupFloorSpaceRecyclerView() {
+        floorSpaceAdapter = FloorSpaceAdapter(floorSpaceList) { selectedFloorSpace ->
+            Toast.makeText(this, "Selected floor space: ${selectedFloorSpace.name}", Toast.LENGTH_SHORT).show()
+        }
+
+        ui.recyclerFloorSpaces.apply {
+            layoutManager = LinearLayoutManager(this@RoomDetailsActivity)
+            adapter = floorSpaceAdapter
         }
     }
 
@@ -105,6 +124,39 @@ class RoomDetailsActivity : AppCompatActivity() {
                 ui.tvNoWindows.visibility = View.VISIBLE
                 ui.recyclerWindows.visibility = View.GONE
                 Toast.makeText(this, "Error loading windows: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun loadFloorSpaces() {
+        val db = Firebase.firestore
+
+        db.collection("houses").document(houseId)
+            .collection("rooms").document(roomId)
+            .collection("floorSpaces")
+            .get()
+            .addOnSuccessListener { documents ->
+                floorSpaceList.clear()
+
+                for (document in documents) {
+                    val floorSpace = document.toObject(FloorSpace::class.java)
+                    floorSpace.id = document.id
+                    floorSpaceList.add(floorSpace)
+                }
+
+                floorSpaceAdapter.notifyDataSetChanged()
+
+                if (floorSpaceList.isEmpty()) {
+                    ui.tvNoFloorSpaces.visibility = View.VISIBLE
+                    ui.recyclerFloorSpaces.visibility = View.GONE
+                } else {
+                    ui.tvNoFloorSpaces.visibility = View.GONE
+                    ui.recyclerFloorSpaces.visibility = View.VISIBLE
+                }
+            }
+            .addOnFailureListener { e ->
+                ui.tvNoFloorSpaces.visibility = View.VISIBLE
+                ui.recyclerFloorSpaces.visibility = View.GONE
+                Toast.makeText(this, "Error loading floor spaces: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 }

@@ -7,13 +7,13 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import au.edu.utas.KIT721_760151.interiorquoteapp.databinding.ActivityAddEditWindowBinding
+import au.edu.utas.KIT721_760151.interiorquoteapp.databinding.ActivityAddEditFloorSpaceBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class AddEditWindowActivity : AppCompatActivity() {
+class AddEditFloorSpaceActivity : AppCompatActivity() {
 
-    private lateinit var ui: ActivityAddEditWindowBinding
+    private lateinit var ui: ActivityAddEditFloorSpaceBinding
     private var houseId: String = ""
     private var roomId: String = ""
 
@@ -34,7 +34,7 @@ class AddEditWindowActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ui = ActivityAddEditWindowBinding.inflate(layoutInflater)
+        ui = ActivityAddEditFloorSpaceBinding.inflate(layoutInflater)
         setContentView(ui.root)
 
         houseId = intent.getStringExtra("houseId") ?: ""
@@ -44,63 +44,63 @@ class AddEditWindowActivity : AppCompatActivity() {
             finish()
         }
 
-        ui.btnSaveWindow.setOnClickListener {
-            saveWindow()
+        ui.btnSaveFloorSpace.setOnClickListener {
+            saveFloorSpace()
         }
 
         ui.layoutSelectedProduct.setOnClickListener {
             val intent = Intent(this, SelectProductActivity::class.java)
-            intent.putExtra("selectionType", "window")
+            intent.putExtra("selectionType", "floor")
             productSelectionLauncher.launch(intent)
         }
     }
 
-    private fun saveWindow() {
-        val windowName = ui.etWindowName.text.toString().trim()
-        val widthText = ui.etWindowWidth.text.toString().trim()
-        val heightText = ui.etWindowHeight.text.toString().trim()
+    private fun saveFloorSpace() {
+        val floorSpaceName = ui.etFloorSpaceName.text.toString().trim()
+        val widthText = ui.etFloorSpaceWidth.text.toString().trim()
+        val lengthText = ui.etFloorSpaceLength.text.toString().trim()
 
-        ui.tvWindowNameError.visibility = View.GONE
-        ui.tvWindowWidthError.visibility = View.GONE
-        ui.tvWindowHeightError.visibility = View.GONE
+        ui.tvFloorSpaceNameError.visibility = View.GONE
+        ui.tvFloorSpaceWidthError.visibility = View.GONE
+        ui.tvFloorSpaceLengthError.visibility = View.GONE
         ui.tvSelectedProductError.visibility = View.GONE
 
-        ui.tvWindowNameError.text = "Window name is required"
-        ui.tvWindowWidthError.text = "Width is required"
-        ui.tvWindowHeightError.text = "Height is required"
+        ui.tvFloorSpaceNameError.text = "Floor space name is required"
+        ui.tvFloorSpaceWidthError.text = "Width is required"
+        ui.tvFloorSpaceLengthError.text = "Length is required"
         ui.tvSelectedProductError.text = "Product is required"
 
-        if (windowName.isEmpty()) {
-            ui.tvWindowNameError.visibility = View.VISIBLE
-            ui.etWindowName.requestFocus()
+        if (floorSpaceName.isEmpty()) {
+            ui.tvFloorSpaceNameError.visibility = View.VISIBLE
+            ui.etFloorSpaceName.requestFocus()
             return
         }
 
         if (widthText.isEmpty()) {
-            ui.tvWindowWidthError.visibility = View.VISIBLE
-            ui.etWindowWidth.requestFocus()
+            ui.tvFloorSpaceWidthError.visibility = View.VISIBLE
+            ui.etFloorSpaceWidth.requestFocus()
             return
         }
 
-        if (heightText.isEmpty()) {
-            ui.tvWindowHeightError.visibility = View.VISIBLE
-            ui.etWindowHeight.requestFocus()
+        if (lengthText.isEmpty()) {
+            ui.tvFloorSpaceLengthError.visibility = View.VISIBLE
+            ui.etFloorSpaceLength.requestFocus()
             return
         }
 
         val width = widthText.toIntOrNull()
         if (width == null || width <= 0) {
-            ui.tvWindowWidthError.text = "Enter a valid width"
-            ui.tvWindowWidthError.visibility = View.VISIBLE
-            ui.etWindowWidth.requestFocus()
+            ui.tvFloorSpaceWidthError.text = "Enter a valid width"
+            ui.tvFloorSpaceWidthError.visibility = View.VISIBLE
+            ui.etFloorSpaceWidth.requestFocus()
             return
         }
 
-        val height = heightText.toIntOrNull()
-        if (height == null || height <= 0) {
-            ui.tvWindowHeightError.text = "Enter a valid height"
-            ui.tvWindowHeightError.visibility = View.VISIBLE
-            ui.etWindowHeight.requestFocus()
+        val length = lengthText.toIntOrNull()
+        if (length == null || length <= 0) {
+            ui.tvFloorSpaceLengthError.text = "Enter a valid length"
+            ui.tvFloorSpaceLengthError.visibility = View.VISIBLE
+            ui.etFloorSpaceLength.requestFocus()
             return
         }
 
@@ -115,10 +115,10 @@ class AddEditWindowActivity : AppCompatActivity() {
             return
         }
 
-        val windowData = hashMapOf(
-            "name" to windowName,
+        val floorSpaceData = hashMapOf(
+            "name" to floorSpaceName,
             "width" to width,
-            "height" to height,
+            "length" to length,
             "productName" to selectedProductName,
             "houseId" to houseId,
             "roomId" to roomId
@@ -127,14 +127,14 @@ class AddEditWindowActivity : AppCompatActivity() {
         val db = Firebase.firestore
         db.collection("houses").document(houseId)
             .collection("rooms").document(roomId)
-            .collection("windows")
-            .add(windowData)
+            .collection("floorSpaces")
+            .add(floorSpaceData)
             .addOnSuccessListener {
-                Toast.makeText(this, "Window saved successfully", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Floor space saved successfully", Toast.LENGTH_SHORT).show()
                 finish()
             }
             .addOnFailureListener { e ->
-                Toast.makeText(this, "Error saving window: ${e.message}", Toast.LENGTH_LONG).show()
+                Toast.makeText(this, "Error saving floor space: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 }
