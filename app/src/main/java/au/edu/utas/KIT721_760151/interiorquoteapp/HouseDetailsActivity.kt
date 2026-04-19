@@ -16,8 +16,12 @@ class HouseDetailsActivity : AppCompatActivity() {
     private var houseId: String = ""
 
     private var customerName: String = ""
+    private var contactNumber: String = ""
     private var addressLine1: String = ""
+    private var addressLine2: String = ""
     private var city: String = ""
+    private var postalCode: String = ""
+    private var email: String = ""
 
     private lateinit var roomAdapter: RoomAdapter
     private val roomList = mutableListOf<Room>()
@@ -29,8 +33,12 @@ class HouseDetailsActivity : AppCompatActivity() {
 
         houseId = intent.getStringExtra("houseId") ?: ""
         customerName = intent.getStringExtra("customerName") ?: ""
+        contactNumber = intent.getStringExtra("contactNumber") ?: ""
         addressLine1 = intent.getStringExtra("addressLine1") ?: ""
+        addressLine2 = intent.getStringExtra("addressLine2") ?: ""
         city = intent.getStringExtra("city") ?: ""
+        postalCode = intent.getStringExtra("postalCode") ?: ""
+        email = intent.getStringExtra("email") ?: ""
 
         ui.tvTitle.text = customerName
         ui.tvCustomerName.text = customerName
@@ -45,7 +53,17 @@ class HouseDetailsActivity : AppCompatActivity() {
         }
 
         ui.btnEditHouse.setOnClickListener {
-            Toast.makeText(this, "Edit house clicked", Toast.LENGTH_SHORT).show()
+            val intent = Intent(this, AddEditHouseActivity::class.java)
+            intent.putExtra("houseId", houseId)
+            intent.putExtra("customerName", customerName)
+            intent.putExtra("contactNumber", contactNumber)
+            intent.putExtra("addressLine1", addressLine1)
+            intent.putExtra("addressLine2", addressLine2)
+            intent.putExtra("city", city)
+            intent.putExtra("postalCode", postalCode)
+            intent.putExtra("email", email)
+            intent.putExtra("isEdit", true)
+            startActivity(intent)
         }
 
         ui.btnAddRoom.setOnClickListener {
@@ -66,6 +84,7 @@ class HouseDetailsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        loadHouseDetails()
         loadRooms()
     }
 
@@ -89,6 +108,34 @@ class HouseDetailsActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@HouseDetailsActivity)
             adapter = roomAdapter
         }
+    }
+
+    private fun loadHouseDetails() {
+        val db = Firebase.firestore
+
+        db.collection("houses")
+            .document(houseId)
+            .get()
+            .addOnSuccessListener { document ->
+                if (document.exists()) {
+                    customerName = document.getString("customerName") ?: ""
+                    contactNumber = document.getString("contactNumber") ?: ""
+                    addressLine1 = document.getString("addressLine1") ?: ""
+                    addressLine2 = document.getString("addressLine2") ?: ""
+                    city = document.getString("city") ?: ""
+                    postalCode = document.getString("postalCode") ?: ""
+                    email = document.getString("email") ?: ""
+
+                    ui.tvTitle.text = customerName
+                    ui.tvCustomerName.text = customerName
+
+                    val cityPart = if (city.isNotBlank()) ", $city" else ""
+                    ui.tvAddress.text = "$addressLine1$cityPart"
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading house details: ${e.message}", Toast.LENGTH_LONG).show()
+            }
     }
 
     private fun loadRooms() {
