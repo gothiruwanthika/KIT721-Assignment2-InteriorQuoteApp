@@ -92,8 +92,25 @@ Assignment 2 - Android Application
 - Calculated final total quote
 - Added working share quote functionality
 
+### Stage 11
+- Implemented room deletion with confirmation dialog
+- Updated room deletion to remove associated windows and floor spaces before deleting the room
+- Added delete support for individual windows from Room Details
+- Added delete support for individual floor spaces from Room Details
+- Implemented Edit Room using AddEditRoomActivity in edit mode
+- Implemented Edit House using AddEditHouseActivity in edit mode
 
+### Stage 12
+- Implemented room photo selection from gallery
+- Saved room photos in Firestore using base64 image data
+- Loaded and displayed saved room photos in RoomDetailsActivity
+- Kept placeholder image and text when no room photo is available
 
+### Stage 13
+- Implemented Edit Window using AddEditWindowActivity in edit mode
+- Implemented Edit Floor Space using AddEditFloorSpaceActivity in edit mode
+- Added item option dialogs for windows and floor spaces with Edit and Delete actions
+- Reused existing Add/Edit screens for updating records
 
 
 
