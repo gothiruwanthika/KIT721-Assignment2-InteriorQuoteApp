@@ -111,6 +111,7 @@ Assignment 2 - Android Application
 - Implemented Edit Floor Space using AddEditFloorSpaceActivity in edit mode
 - Added item option dialogs for windows and floor spaces with Edit and Delete actions
 - Reused existing Add/Edit screens for updating records
+- Updated Select Product screen to load real window and floor space names from Firestore instead of hardcoded labels
 
 
 
