@@ -74,6 +74,8 @@ class AddEditWindowActivity : AppCompatActivity() {
         ui.layoutSelectedProduct.setOnClickListener {
             val intent = Intent(this, SelectProductActivity::class.java)
             intent.putExtra("selectionType", "window")
+            intent.putExtra("houseId", houseId)
+            intent.putExtra("roomId", roomId)
             productSelectionLauncher.launch(intent)
         }
     }

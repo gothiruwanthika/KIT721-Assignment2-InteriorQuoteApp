@@ -8,12 +8,20 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import au.edu.utas.KIT721_760151.interiorquoteapp.databinding.ActivitySelectProductBinding
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 
 class SelectProductActivity : AppCompatActivity() {
 
     private lateinit var ui: ActivitySelectProductBinding
     private var selectedProduct: Product? = null
     private var selectionType: String = "window"
+    private var houseId: String = ""
+    private var roomId: String = ""
+
+    private var windowList = mutableListOf<Window>()
+    private var floorSpaceList = mutableListOf<FloorSpace>()
+    private var selectedItemIndex = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -21,6 +29,8 @@ class SelectProductActivity : AppCompatActivity() {
         setContentView(ui.root)
 
         selectionType = intent.getStringExtra("selectionType") ?: "window"
+        houseId = intent.getStringExtra("houseId") ?: ""
+        roomId = intent.getStringExtra("roomId") ?: ""
 
         ui.btnBack.setOnClickListener {
             finish()
@@ -44,46 +54,11 @@ class SelectProductActivity : AppCompatActivity() {
 
         selectedProduct = products[0]
 
-        if (selectionType == "floor") {
-            ui.tvRoomInfo.text = "Room : Living Room"
-            ui.tvWindowsInRoom.text = "Floor in this room:"
-            ui.btnWindowTab1.text = "Floor 1"
-            ui.btnWindowTab2.text = "Floor 2"
-            ui.btnWindowTab3.visibility = View.GONE
-
-            ui.tvRecommendedProductName.text = "Vinyl Flooring"
-            ui.tvRecommendedProductPrice.text = "$40 / m² · Durable and water resistant"
-            ui.tvRecommendedNote.text = "Suggested for all floor spaces in this room"
-            ui.tvApplyWindowTitle.text = "Apply to Floor 1 (3500 × 4000 mm)"
-            ui.rbChooseDifferent.text = "Choose Different Product for this Floor Space"
-            ui.tvRecommendedSummary.text = "Vinyl Flooring, $40 / m²"
-            ui.tvApplySameSelectionLabel.text = "Apply same selection to all floor in this room"
-            ui.tvApplySameSelectionHint.text = "This will update floor 2 with the same product"
-        } else {
-            ui.tvRoomInfo.text = "Room : Living Room"
-            ui.tvWindowsInRoom.text = "Windows in this room:"
-            ui.btnWindowTab1.text = "Window 1"
-            ui.btnWindowTab2.text = "Window 2"
-            ui.btnWindowTab3.visibility = View.VISIBLE
-            ui.btnWindowTab3.text = "Window 3"
-
-            ui.tvRecommendedProductName.text = "Roller Blind"
-            ui.tvRecommendedProductPrice.text = "$50 / m² · Best for light control"
-            ui.tvRecommendedNote.text = "Suggested for all windows in this room"
-            ui.tvApplyWindowTitle.text = "Apply to Window 1 (1200 × 1500 mm)"
-            ui.rbChooseDifferent.text = "Choose Different Product for this Window"
-            ui.tvRecommendedSummary.text = "Roller Blind, $50 / m²"
-            ui.tvApplySameSelectionLabel.text = "Apply same selection to all windows in this room"
-            ui.tvApplySameSelectionHint.text = "This will update window 2 & window 3 with the same product"
-        }
-
         val adapter = ProductAdapter(products) { product ->
             selectedProduct = product
             ui.tvRecommendedProductName.text = product.name
             ui.tvRecommendedProductPrice.text = product.priceText
             ui.tvRecommendedSummary.text = "${product.name}, ${product.priceText}"
-
-            returnSelectedProduct(product)
         }
 
         ui.recyclerProducts.layoutManager = LinearLayoutManager(this)
@@ -102,21 +77,177 @@ class SelectProductActivity : AppCompatActivity() {
             Toast.makeText(this, "Apply to all will be added later", Toast.LENGTH_SHORT).show()
         }
 
-        ui.btnWindowTab1.setOnClickListener {
-            Toast.makeText(this, "Tab switching will be added later", Toast.LENGTH_SHORT).show()
-        }
-
-        ui.btnWindowTab2.setOnClickListener {
-            Toast.makeText(this, "Tab switching will be added later", Toast.LENGTH_SHORT).show()
-        }
-
-        ui.btnWindowTab3.setOnClickListener {
-            Toast.makeText(this, "Tab switching will be added later", Toast.LENGTH_SHORT).show()
-        }
-
         ui.switchApplySameSelection.setOnCheckedChangeListener { _, _ ->
             Toast.makeText(this, "Apply same selection logic will be added later", Toast.LENGTH_SHORT).show()
         }
+
+        loadRoomItems()
+    }
+
+    private fun loadRoomItems() {
+        val db = Firebase.firestore
+
+        db.collection("houses").document(houseId)
+            .collection("rooms").document(roomId)
+            .get()
+            .addOnSuccessListener { roomDoc ->
+                val roomName = roomDoc.getString("name") ?: "Room"
+
+                ui.tvRoomInfo.text = "Room : $roomName"
+
+                if (selectionType == "floor") {
+                    ui.tvWindowsInRoom.text = "Floor in this room:"
+                    ui.tvRecommendedProductName.text = "Vinyl Flooring"
+                    ui.tvRecommendedProductPrice.text = "$40 / m² · Durable and water resistant"
+                    ui.tvRecommendedNote.text = "Suggested for all floor spaces in this room"
+                    ui.rbChooseDifferent.text = "Choose Different Product for this Floor Space"
+                    ui.tvRecommendedSummary.text = "Vinyl Flooring, $40 / m²"
+                    ui.tvApplySameSelectionLabel.text = "Apply same selection to all floor in this room"
+                } else {
+                    ui.tvWindowsInRoom.text = "Windows in this room:"
+                    ui.tvRecommendedProductName.text = "Roller Blind"
+                    ui.tvRecommendedProductPrice.text = "$50 / m² · Best for light control"
+                    ui.tvRecommendedNote.text = "Suggested for all windows in this room"
+                    ui.rbChooseDifferent.text = "Choose Different Product for this Window"
+                    ui.tvRecommendedSummary.text = "Roller Blind, $50 / m²"
+                    ui.tvApplySameSelectionLabel.text = "Apply same selection to all windows in this room"
+                }
+
+                if (selectionType == "floor") {
+                    loadFloorSpaces()
+                } else {
+                    loadWindows()
+                }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading room: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun loadWindows() {
+        val db = Firebase.firestore
+
+        db.collection("houses").document(houseId)
+            .collection("rooms").document(roomId)
+            .collection("windows")
+            .get()
+            .addOnSuccessListener { documents ->
+                windowList.clear()
+
+                for (document in documents) {
+                    val window = document.toObject(Window::class.java)
+                    window.id = document.id
+                    windowList.add(window)
+                }
+
+                updateWindowTabs()
+                updateSelectedWindowDisplay()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading windows: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun loadFloorSpaces() {
+        val db = Firebase.firestore
+
+        db.collection("houses").document(houseId)
+            .collection("rooms").document(roomId)
+            .collection("floorSpaces")
+            .get()
+            .addOnSuccessListener { documents ->
+                floorSpaceList.clear()
+
+                for (document in documents) {
+                    val floorSpace = document.toObject(FloorSpace::class.java)
+                    floorSpace.id = document.id
+                    floorSpaceList.add(floorSpace)
+                }
+
+                updateFloorTabs()
+                updateSelectedFloorDisplay()
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading floor spaces: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun updateWindowTabs() {
+        if (windowList.isEmpty()) return
+
+        selectedItemIndex = 0
+
+        ui.btnWindowTab1.text = windowList.getOrNull(0)?.name ?: ""
+        ui.btnWindowTab2.text = windowList.getOrNull(1)?.name ?: ""
+        ui.btnWindowTab3.text = windowList.getOrNull(2)?.name ?: ""
+
+        ui.btnWindowTab1.visibility = if (windowList.size >= 1) View.VISIBLE else View.GONE
+        ui.btnWindowTab2.visibility = if (windowList.size >= 2) View.VISIBLE else View.GONE
+        ui.btnWindowTab3.visibility = if (windowList.size >= 3) View.VISIBLE else View.GONE
+
+        ui.btnWindowTab1.setOnClickListener {
+            selectedItemIndex = 0
+            updateSelectedWindowDisplay()
+        }
+
+        ui.btnWindowTab2.setOnClickListener {
+            selectedItemIndex = 1
+            updateSelectedWindowDisplay()
+        }
+
+        ui.btnWindowTab3.setOnClickListener {
+            selectedItemIndex = 2
+            updateSelectedWindowDisplay()
+        }
+    }
+
+    private fun updateFloorTabs() {
+        if (floorSpaceList.isEmpty()) return
+
+        selectedItemIndex = 0
+
+        ui.btnWindowTab1.text = floorSpaceList.getOrNull(0)?.name ?: ""
+        ui.btnWindowTab2.text = floorSpaceList.getOrNull(1)?.name ?: ""
+        ui.btnWindowTab3.text = floorSpaceList.getOrNull(2)?.name ?: ""
+
+        ui.btnWindowTab1.visibility = if (floorSpaceList.size >= 1) View.VISIBLE else View.GONE
+        ui.btnWindowTab2.visibility = if (floorSpaceList.size >= 2) View.VISIBLE else View.GONE
+        ui.btnWindowTab3.visibility = if (floorSpaceList.size >= 3) View.VISIBLE else View.GONE
+
+        ui.btnWindowTab1.setOnClickListener {
+            selectedItemIndex = 0
+            updateSelectedFloorDisplay()
+        }
+
+        ui.btnWindowTab2.setOnClickListener {
+            selectedItemIndex = 1
+            updateSelectedFloorDisplay()
+        }
+
+        ui.btnWindowTab3.setOnClickListener {
+            selectedItemIndex = 2
+            updateSelectedFloorDisplay()
+        }
+    }
+
+    private fun updateSelectedWindowDisplay() {
+        val window = windowList.getOrNull(selectedItemIndex) ?: return
+
+        ui.tvApplyWindowTitle.text =
+            "Apply to ${window.name} (${window.width} × ${window.height} mm)"
+
+        ui.tvApplySameSelectionHint.text =
+            "This will update the other windows in this room with the same product"
+    }
+
+    private fun updateSelectedFloorDisplay() {
+        val floor = floorSpaceList.getOrNull(selectedItemIndex) ?: return
+
+        ui.tvApplyWindowTitle.text =
+            "Apply to ${floor.name} (${floor.width} × ${floor.length} mm)"
+
+        ui.tvApplySameSelectionHint.text =
+            "This will update the other floor spaces in this room with the same product"
     }
 
     private fun returnSelectedProduct(product: Product) {

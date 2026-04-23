@@ -74,6 +74,8 @@ class AddEditFloorSpaceActivity : AppCompatActivity() {
         ui.layoutSelectedProduct.setOnClickListener {
             val intent = Intent(this, SelectProductActivity::class.java)
             intent.putExtra("selectionType", "floor")
+            intent.putExtra("houseId", houseId)
+            intent.putExtra("roomId", roomId)
             productSelectionLauncher.launch(intent)
         }
     }
