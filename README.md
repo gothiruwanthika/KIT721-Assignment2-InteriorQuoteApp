@@ -160,6 +160,11 @@ Assignment 2 - Android Application
 - Confirmed CSV sharing works through the OS built-in share flow
 - Improved quote export quality for HD+ submission expectations
 
+### Stage 20
+- Added a House Summary Dashboard to the House Details screen
+- Displays total rooms, total windows, total floor spaces, and estimated total cost
+- Summary values are calculated dynamically from Firestore data
+- Gives the user a quick overview before generating the full quote
 
 ## Test Device / Emulator
 - Device: Medium Phone API 35 Emulator
@@ -199,7 +204,9 @@ Displays a larger preview of the room image selected for a room.
 
 ## Custom Feature
 - Apply same selection to all windows or floor spaces in a room
+- House Summary Dashboard on the House Details screen.
 
+        This feature gives the user a quick overview of the selected house before generating the full quote by displaying the total number of rooms, total windows, total floor spaces, and an estimated total cost calculated from saved room, window, and floor space data.
 ## Additional Usability Enhancement
 Tapping a room image opens a larger preview screen so the photo can be viewed more clearly.
 
