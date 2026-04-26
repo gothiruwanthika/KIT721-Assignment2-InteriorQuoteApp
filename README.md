@@ -113,20 +113,109 @@ Assignment 2 - Android Application
 - Reused existing Add/Edit screens for updating records
 - Updated Select Product screen to load real window and floor space names from Firestore instead of hardcoded labels
 
+### Stage 14
 
+- Integrated the provided Product API into SelectProductActivity
+- Replaced hardcoded products with API-loaded window and floor products
+- Ensured only window products are shown for windows
+- Ensured only floor products are shown for floor spaces
+- Improved product list display and product images
+- Fixed product tab behaviour so empty rooms do not show fake window/floor tabs
+
+### Stage 15
+
+- Implemented window product compatibility constraints
+- Prevented incompatible window products from being selected
+- Added clear reason messages for invalid product selections
+- Applied constraint logic for minimum height, maximum height, minimum width, maximum width, panel splitting, and panel count
+- Improved recommended product behaviour for compatible window products
+
+### Stage 16
+
+- Added house search functionality on the main house list
+- Enabled searching by customer name, address, and city
+- Improved list usability and navigation for larger sets of house records
+
+### Stage 17
+
+- Improved room photo functionality
+- Added support for both Gallery and Camera image selection
+- Implemented a custom photo source dialog for a more professional UI
+- Kept room images persisted in Firestore and visible after reopening the app
+- Added full room image preview support
+
+### Stage 18
+
+- Improved quote generation and display
+- Displayed itemised quote information per room
+- Added room include/exclude checkboxes on the quote screen
+- Recalculated totals immediately when rooms are included or excluded
+- Improved itemised quote formatting for windows, floor spaces, labour cost, room total, and final total
+
+### Stage 19
+
+- Improved sharing functionality
+- Changed quote sharing from plain text preview to a real CSV file attachment
+- Added FileProvider support for Android sharing
+- Confirmed CSV sharing works through the OS built-in share flow
+- Improved quote export quality for HD+ submission expectations
 
 
 ## Test Device / Emulator
-- Medium Phone API 35 Emulator
+- Device: Medium Phone API 35 Emulator
+- Orientation: Portrait
 
 ## Activities
+
 ### MainActivity
-Used for initial project setup and Firebase/Firestore connection testing.
+Displays the list of houses and allows the user to search houses, open a selected house, or create a new house.
 
+### AddEditHouseActivity
+Used to create a new house or edit an existing house. After saving, the user returns to the house list or house details flow.
+
+### HouseDetailsActivity
+Displays the selected house details and associated room list. From here the user can edit the house, add a room, open room details, generate a quote, or delete the house.
+
+### AddEditRoomActivity
+Used to create or edit a room within a house. Also supports adding a room photo from gallery or camera.
+
+### RoomDetailsActivity
+Displays the selected room and its associated windows and floor spaces. From here the user can edit the room, add windows, add floor spaces, preview the room image, or delete the room.
+
+### AddEditWindowActivity
+Used to create or edit a window record for a selected room.
+
+### AddEditFloorSpaceActivity
+Used to create or edit a floor space record for a selected room.
+
+### SelectProductActivity
+Used by both AddEditWindowActivity and AddEditFloorSpaceActivity to browse and select products from the provided Product API. It also applies window compatibility constraints when selecting window products.
+
+### QuoteActivity
+Generates and displays an itemised quote for the selected house, supports room include/exclude updates, recalculates totals, and shares the quote as a CSV attachment.
+
+### RoomImagePreviewActivity
+Displays a larger preview of the room image selected for a room.
+
+## Custom Feature
+- Apply same selection to all windows or floor spaces in a room
 ## References
-- Firebase Documentation
-- Android Studio Documentation
-- KIT721 tutorials and assignment documents
-
+- Firebase Firestore documentation
+- Firebase Storage / Android image handling documentation
+- Android Developers documentation for:
+        - RecyclerView
+        - Activity Result API
+        - AlertDialog / Dialog
+        - FileProvider
+        - Sharing files with intents
+- KIT721 lecture, tutorial, and assignment materials
+- Product API provided in the assignment specification and rubric.
 ## GenAI Use
-This project was developed with planning, debugging, and explanatory support from ChatGPT. All implementation decisions were reviewed and tested by the student.
+Generative AI was used for:
+- planning implementation stages
+- debugging Kotlin and XML issues
+- improving UI wording and layout ideas
+- helping structure validation and sharing workflows
+- explaining errors and suggesting fixes during development
+
+ChatGPT support was used as guidance only. All code was reviewed, tested, adapted, and integrated by the student before inclusion in the final application.
