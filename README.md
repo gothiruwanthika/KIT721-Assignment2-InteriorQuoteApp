@@ -211,11 +211,28 @@ Displays a larger preview of the room image selected for a room.
 - KIT721 lecture, tutorial, and assignment materials
 - Product API provided in the assignment specification and rubric.
 ## GenAI Use
-Generative AI was used for:
+Generative AI (ChatGPT) was used during development for:
 - planning implementation stages
 - debugging Kotlin and XML issues
 - improving UI wording and layout ideas
-- helping structure validation and sharing workflows
-- explaining errors and suggesting fixes during development
+- generating example code snippets and implementation guidance for selected features
+- structuring Firestore loading and nested collection handling
+- implementing product API integration and window constraint logic
+- improving quote generation and CSV sharing
+- explaining runtime and compilation errors during development
 
-ChatGPT support was used as guidance only. All code was reviewed, tested, adapted, and integrated by the student before inclusion in the final application.
+ChatGPT support was used as guidance only. Any generated code or suggestions were reviewed, tested, adapted, and integrated by the student before inclusion in the final application. The final submitted application was assembled, modified, debugged, and validated by the student.
+
+### Shared ChatGPT Link
+- https://chatgpt.com/share/69edaa11-3664-839d-a2de-c70d03b94c11 — representative chat used for Android app development guidance on Firestore loading, add/edit/delete flows, product API integration, window constraints, camera/gallery image handling, quote generation, UI improvements, and CSV sharing.
+
+### Prompts / Topics Used
+Examples of prompts and topics discussed with ChatGPT included:
+- how to load nested room, window, and floor space data from Firestore in Kotlin
+- how to implement add/edit/delete flows for houses, rooms, windows, and floor spaces
+- how to validate window product constraints such as min/max width, min/max height, panel splitting, and panel count
+- how to implement gallery and camera selection for room photos
+- how to generate and share a CSV quote file using Android FileProvider
+- how to improve RecyclerView layouts, dialogs, and quote screen usability
+
+The shared link above is representative of the type of guidance used during the assignment. Additional iterative support was also used across development.
