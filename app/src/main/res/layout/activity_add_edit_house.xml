@@ -38,11 +38,12 @@
             <Button
                 android:id="@+id/btnSaveHouse"
                 style="@style/PrimaryButton"
-                android:layout_width="88dp"
-                android:layout_height="44dp"
+                android:layout_width="96dp"
+                android:layout_height="48dp"
                 android:layout_alignParentEnd="true"
                 android:backgroundTint="@color/primary"
-                android:text="Save" />
+                android:text="Save"
+                android:textAllCaps="false" />
         </RelativeLayout>
 
         <LinearLayout
