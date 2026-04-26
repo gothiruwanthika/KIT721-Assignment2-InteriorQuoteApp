@@ -3,7 +3,9 @@ package au.edu.utas.KIT721_760151.interiorquoteapp
 import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.View
+import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -114,6 +116,8 @@ class HouseDetailsActivity : AppCompatActivity() {
         ui.recyclerRooms.apply {
             layoutManager = LinearLayoutManager(this@HouseDetailsActivity)
             adapter = roomAdapter
+            setHasFixedSize(false)
+            isNestedScrollingEnabled = false
         }
     }
 
@@ -157,6 +161,7 @@ class HouseDetailsActivity : AppCompatActivity() {
 
                 if (documents.isEmpty) {
                     roomAdapter.notifyDataSetChanged()
+                    updateRoomRecyclerHeight()
                     ui.tvNoRooms.visibility = View.VISIBLE
                     ui.recyclerRooms.visibility = View.GONE
                     return@addOnSuccessListener
@@ -215,6 +220,7 @@ class HouseDetailsActivity : AppCompatActivity() {
 
                                     if (processedRooms == totalRooms) {
                                         roomAdapter.notifyDataSetChanged()
+                                        updateRoomRecyclerHeight()
                                         updateSummary(
                                             roomCount = summaryRoomCount,
                                             windowCount = summaryWindowCount,
@@ -243,6 +249,7 @@ class HouseDetailsActivity : AppCompatActivity() {
 
                                     if (processedRooms == totalRooms) {
                                         roomAdapter.notifyDataSetChanged()
+                                        updateRoomRecyclerHeight()
                                         updateSummary(
                                             roomCount = summaryRoomCount,
                                             windowCount = summaryWindowCount,
@@ -275,6 +282,7 @@ class HouseDetailsActivity : AppCompatActivity() {
 
                             if (processedRooms == totalRooms) {
                                 roomAdapter.notifyDataSetChanged()
+                                updateRoomRecyclerHeight()
                                 updateSummary(
                                     roomCount = summaryRoomCount,
                                     windowCount = summaryWindowCount,
@@ -393,6 +401,24 @@ class HouseDetailsActivity : AppCompatActivity() {
         ui.tvSummaryWindows.text = windowCount.toString()
         ui.tvSummaryFloorSpaces.text = floorCount.toString()
         ui.tvSummaryEstimatedTotal.text = formatPrice(estimatedTotal)
+    }
+
+    private fun updateRoomRecyclerHeight() {
+        val itemHeightPx = dpToPx(120f)
+        val totalHeight = itemHeightPx * roomList.size
+        val params = ui.recyclerRooms.layoutParams
+        params.height =
+            if (roomList.isEmpty()) ViewGroup.LayoutParams.WRAP_CONTENT else totalHeight
+        ui.recyclerRooms.layoutParams = params
+        ui.recyclerRooms.requestLayout()
+    }
+
+    private fun dpToPx(dp: Float): Int {
+        return TypedValue.applyDimension(
+            TypedValue.COMPLEX_UNIT_DIP,
+            dp,
+            resources.displayMetrics
+        ).toInt()
     }
 
     private fun formatPrice(value: Double): String {
