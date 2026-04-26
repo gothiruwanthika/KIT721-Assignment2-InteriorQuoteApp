@@ -1,5 +1,6 @@
 package au.edu.utas.KIT721_760151.interiorquoteapp
 
+import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -64,6 +65,10 @@ class HouseDetailsActivity : AppCompatActivity() {
             intent.putExtra("email", email)
             intent.putExtra("isEdit", true)
             startActivity(intent)
+        }
+
+        ui.btnDeleteHouse.setOnClickListener {
+            showDeleteHouseConfirmation()
         }
 
         ui.btnAddRoom.setOnClickListener {
@@ -248,6 +253,67 @@ class HouseDetailsActivity : AppCompatActivity() {
             .update("includedInQuote", isChecked)
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error updating room selection: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun showDeleteHouseConfirmation() {
+        AlertDialog.Builder(this)
+            .setTitle("Delete House")
+            .setMessage("Are you sure you want to delete this house and all its rooms?")
+            .setPositiveButton("Delete") { _, _ ->
+                deleteHouseAndRooms()
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun deleteHouseAndRooms() {
+        val db = Firebase.firestore
+
+        db.collection("houses").document(houseId)
+            .collection("rooms")
+            .get()
+            .addOnSuccessListener { roomDocuments ->
+                val batch = db.batch()
+
+                for (roomDocument in roomDocuments) {
+                    batch.delete(roomDocument.reference)
+                }
+
+                batch.commit()
+                    .addOnSuccessListener {
+                        db.collection("houses").document(houseId)
+                            .delete()
+                            .addOnSuccessListener {
+                                Toast.makeText(
+                                    this,
+                                    "House deleted successfully",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                                finish()
+                            }
+                            .addOnFailureListener { e ->
+                                Toast.makeText(
+                                    this,
+                                    "Error deleting house: ${e.message}",
+                                    Toast.LENGTH_LONG
+                                ).show()
+                            }
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            this,
+                            "Error deleting rooms: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(
+                    this,
+                    "Error loading rooms for deletion: ${e.message}",
+                    Toast.LENGTH_LONG
+                ).show()
             }
     }
 }

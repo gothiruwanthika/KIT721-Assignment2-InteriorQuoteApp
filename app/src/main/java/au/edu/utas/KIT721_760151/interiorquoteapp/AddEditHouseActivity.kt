@@ -1,6 +1,7 @@
 package au.edu.utas.KIT721_760151.interiorquoteapp
 
 import android.os.Bundle
+import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -23,6 +24,7 @@ class AddEditHouseActivity : AppCompatActivity() {
         isEditMode = intent.getBooleanExtra("isEdit", false)
 
         if (isEditMode) {
+            ui.tvFormTitle.text = "Edit House"
             ui.btnSaveHouse.text = "Update"
 
             ui.etCustomerName.setText(intent.getStringExtra("customerName") ?: "")
@@ -51,12 +53,15 @@ class AddEditHouseActivity : AppCompatActivity() {
         val customerName = ui.etCustomerName.text.toString().trim()
         val contactNumber = ui.etContactNumber.text.toString().trim()
         val addressLine1 = ui.etAddressLine1.text.toString().trim()
+        val email = ui.etEmail.text.toString().trim()
 
         ui.tvCustomerNameError.visibility = View.GONE
         ui.tvContactNumberError.visibility = View.GONE
         ui.tvAddressLine1Error.visibility = View.GONE
+        ui.tvEmailError.visibility = View.GONE
 
         if (customerName.isEmpty()) {
+            ui.tvCustomerNameError.text = "Customer name is required"
             ui.tvCustomerNameError.visibility = View.VISIBLE
             ui.etCustomerName.requestFocus()
             return false
@@ -77,8 +82,16 @@ class AddEditHouseActivity : AppCompatActivity() {
         }
 
         if (addressLine1.isEmpty()) {
+            ui.tvAddressLine1Error.text = "Address line 1 is required"
             ui.tvAddressLine1Error.visibility = View.VISIBLE
             ui.etAddressLine1.requestFocus()
+            return false
+        }
+
+        if (email.isNotEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            ui.tvEmailError.text = "Enter a valid email address"
+            ui.tvEmailError.visibility = View.VISIBLE
+            ui.etEmail.requestFocus()
             return false
         }
 
