@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import au.edu.utas.KIT721_760151.interiorquoteapp.databinding.ActivityHouseDetailsBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import java.util.Locale
 
 class HouseDetailsActivity : AppCompatActivity() {
 
@@ -48,6 +49,7 @@ class HouseDetailsActivity : AppCompatActivity() {
         ui.tvAddress.text = "$addressLine1$cityPart"
 
         setupRecyclerView()
+        resetSummary()
 
         ui.btnBack.setOnClickListener {
             finish()
@@ -151,6 +153,7 @@ class HouseDetailsActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { documents ->
                 roomList.clear()
+                resetSummary()
 
                 if (documents.isEmpty) {
                     roomAdapter.notifyDataSetChanged()
@@ -161,6 +164,11 @@ class HouseDetailsActivity : AppCompatActivity() {
 
                 val totalRooms = documents.size()
                 var processedRooms = 0
+
+                var summaryRoomCount = 0
+                var summaryWindowCount = 0
+                var summaryFloorCount = 0
+                var summaryEstimatedTotal = 0.0
 
                 for (document in documents) {
                     val room = document.toObject(Room::class.java)
@@ -180,11 +188,39 @@ class HouseDetailsActivity : AppCompatActivity() {
                                 .addOnSuccessListener { floorDocs ->
                                     room.floorCount = floorDocs.size()
 
+                                    var roomEstimatedTotal = room.labourCost
+                                    summaryRoomCount += 1
+                                    summaryWindowCount += room.windowCount
+                                    summaryFloorCount += room.floorCount
+
+                                    for (windowDoc in windowDocs) {
+                                        val window = windowDoc.toObject(Window::class.java)
+                                        val pricePerSqm =
+                                            if (window.productPricePerSqm > 0) window.productPricePerSqm else 50.0
+                                        val areaSqm = (window.width * window.height) / 1_000_000.0
+                                        roomEstimatedTotal += areaSqm * pricePerSqm
+                                    }
+
+                                    for (floorDoc in floorDocs) {
+                                        val floorSpace = floorDoc.toObject(FloorSpace::class.java)
+                                        val pricePerSqm =
+                                            if (floorSpace.productPricePerSqm > 0) floorSpace.productPricePerSqm else 100.0
+                                        val areaSqm = (floorSpace.width * floorSpace.length) / 1_000_000.0
+                                        roomEstimatedTotal += areaSqm * pricePerSqm
+                                    }
+
+                                    summaryEstimatedTotal += roomEstimatedTotal
                                     roomList.add(room)
                                     processedRooms++
 
                                     if (processedRooms == totalRooms) {
                                         roomAdapter.notifyDataSetChanged()
+                                        updateSummary(
+                                            roomCount = summaryRoomCount,
+                                            windowCount = summaryWindowCount,
+                                            floorCount = summaryFloorCount,
+                                            estimatedTotal = summaryEstimatedTotal
+                                        )
 
                                         if (roomList.isEmpty()) {
                                             ui.tvNoRooms.visibility = View.VISIBLE
@@ -197,11 +233,22 @@ class HouseDetailsActivity : AppCompatActivity() {
                                 }
                                 .addOnFailureListener { e ->
                                     room.floorCount = 0
+                                    summaryRoomCount += 1
+                                    summaryWindowCount += room.windowCount
+                                    summaryFloorCount += 0
+                                    summaryEstimatedTotal += room.labourCost
+
                                     roomList.add(room)
                                     processedRooms++
 
                                     if (processedRooms == totalRooms) {
                                         roomAdapter.notifyDataSetChanged()
+                                        updateSummary(
+                                            roomCount = summaryRoomCount,
+                                            windowCount = summaryWindowCount,
+                                            floorCount = summaryFloorCount,
+                                            estimatedTotal = summaryEstimatedTotal
+                                        )
 
                                         if (roomList.isEmpty()) {
                                             ui.tvNoRooms.visibility = View.VISIBLE
@@ -218,11 +265,22 @@ class HouseDetailsActivity : AppCompatActivity() {
                         .addOnFailureListener { e ->
                             room.windowCount = 0
                             room.floorCount = 0
+                            summaryRoomCount += 1
+                            summaryWindowCount += 0
+                            summaryFloorCount += 0
+                            summaryEstimatedTotal += room.labourCost
+
                             roomList.add(room)
                             processedRooms++
 
                             if (processedRooms == totalRooms) {
                                 roomAdapter.notifyDataSetChanged()
+                                updateSummary(
+                                    roomCount = summaryRoomCount,
+                                    windowCount = summaryWindowCount,
+                                    floorCount = summaryFloorCount,
+                                    estimatedTotal = summaryEstimatedTotal
+                                )
 
                                 if (roomList.isEmpty()) {
                                     ui.tvNoRooms.visibility = View.VISIBLE
@@ -238,6 +296,7 @@ class HouseDetailsActivity : AppCompatActivity() {
                 }
             }
             .addOnFailureListener { e ->
+                resetSummary()
                 ui.tvNoRooms.visibility = View.VISIBLE
                 ui.recyclerRooms.visibility = View.GONE
                 Toast.makeText(this, "Error loading rooms: ${e.message}", Toast.LENGTH_LONG).show()
@@ -315,5 +374,32 @@ class HouseDetailsActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
             }
+    }
+
+    private fun resetSummary() {
+        ui.tvSummaryRooms.text = "0"
+        ui.tvSummaryWindows.text = "0"
+        ui.tvSummaryFloorSpaces.text = "0"
+        ui.tvSummaryEstimatedTotal.text = formatPrice(0.0)
+    }
+
+    private fun updateSummary(
+        roomCount: Int,
+        windowCount: Int,
+        floorCount: Int,
+        estimatedTotal: Double
+    ) {
+        ui.tvSummaryRooms.text = roomCount.toString()
+        ui.tvSummaryWindows.text = windowCount.toString()
+        ui.tvSummaryFloorSpaces.text = floorCount.toString()
+        ui.tvSummaryEstimatedTotal.text = formatPrice(estimatedTotal)
+    }
+
+    private fun formatPrice(value: Double): String {
+        return if (value % 1.0 == 0.0) {
+            "$${value.toInt()}"
+        } else {
+            "$" + String.format(Locale.US, "%.2f", value)
+        }
     }
 }
