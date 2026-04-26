@@ -199,6 +199,10 @@ Displays a larger preview of the room image selected for a room.
 
 ## Custom Feature
 - Apply same selection to all windows or floor spaces in a room
+
+## Additional Usability Enhancement
+Tapping a room image opens a larger preview screen so the photo can be viewed more clearly.
+
 ## References
 - Firebase Firestore documentation
 - Firebase Storage / Android image handling documentation
