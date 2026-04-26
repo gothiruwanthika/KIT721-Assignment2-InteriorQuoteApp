@@ -22,7 +22,21 @@ class RoomAdapter(
         val room = rooms[position]
 
         holder.ui.tvRoomName.text = room.name
-        holder.ui.tvRoomDetails.text = "Labour Cost: $${room.labourCost} | no windows | no floors"
+
+        val windowText = when (room.windowCount) {
+            0 -> "no windows"
+            1 -> "1 window"
+            else -> "${room.windowCount} windows"
+        }
+
+        val floorText = when (room.floorCount) {
+            0 -> "no floors"
+            1 -> "1 floor"
+            else -> "${room.floorCount} floors"
+        }
+
+        holder.ui.tvRoomDetails.text =
+            "Labour Cost: $${room.labourCost} | $windowText | $floorText"
 
         holder.ui.cbIncludeRoom.setOnCheckedChangeListener(null)
         holder.ui.cbIncludeRoom.isChecked = room.includedInQuote
@@ -39,7 +53,5 @@ class RoomAdapter(
         }
     }
 
-    override fun getItemCount(): Int {
-        return rooms.size
-    }
+    override fun getItemCount(): Int = rooms.size
 }

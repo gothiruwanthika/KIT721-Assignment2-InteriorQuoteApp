@@ -1,11 +1,15 @@
 package au.edu.utas.KIT721_760151.interiorquoteapp
 
+import android.app.Dialog
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.util.Base64
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +32,15 @@ class AddEditRoomActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
             if (uri != null) {
                 handleSelectedImage(uri)
+            }
+        }
+
+    private val cameraLauncher =
+        registerForActivityResult(ActivityResultContracts.TakePicturePreview()) { bitmap: Bitmap? ->
+            if (bitmap != null) {
+                handleCapturedBitmap(bitmap)
+            } else {
+                Toast.makeText(this, "No photo captured", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -66,8 +79,35 @@ class AddEditRoomActivity : AppCompatActivity() {
         }
 
         ui.btnAddPhoto.setOnClickListener {
+            showImageSourceDialog()
+        }
+    }
+
+    private fun showImageSourceDialog() {
+        val dialog = Dialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_photo_options, null)
+        dialog.setContentView(view)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+
+        val layoutChooseGallery = view.findViewById<LinearLayout>(R.id.layoutChooseGallery)
+        val layoutTakePhoto = view.findViewById<LinearLayout>(R.id.layoutTakePhoto)
+        val tvDialogCancel = view.findViewById<TextView>(R.id.tvDialogCancel)
+
+        layoutChooseGallery.setOnClickListener {
+            dialog.dismiss()
             imagePickerLauncher.launch("image/*")
         }
+
+        layoutTakePhoto.setOnClickListener {
+            dialog.dismiss()
+            cameraLauncher.launch(null)
+        }
+
+        tvDialogCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun handleSelectedImage(uri: Uri) {
@@ -85,6 +125,18 @@ class AddEditRoomActivity : AppCompatActivity() {
             }
         } catch (e: Exception) {
             Toast.makeText(this, "Error loading image: ${e.message}", Toast.LENGTH_LONG).show()
+        }
+    }
+
+    private fun handleCapturedBitmap(bitmap: Bitmap) {
+        try {
+            val resizedBitmap = resizeBitmap(bitmap, 600)
+            imageBase64 = bitmapToBase64(resizedBitmap)
+
+            ui.imgRoomPhotoPlaceholder.setImageBitmap(resizedBitmap)
+            ui.tvNoPhoto.visibility = View.GONE
+        } catch (e: Exception) {
+            Toast.makeText(this, "Error capturing image: ${e.message}", Toast.LENGTH_LONG).show()
         }
     }
 

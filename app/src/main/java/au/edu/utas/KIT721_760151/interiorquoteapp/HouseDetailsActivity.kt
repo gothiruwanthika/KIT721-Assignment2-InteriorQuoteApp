@@ -6,9 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import au.edu.utas.KIT721_760151.interiorquoteapp.databinding.ActivityHouseDetailsBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import au.edu.utas.KIT721_760151.interiorquoteapp.databinding.ActivityHouseDetailsBinding
 
 class HouseDetailsActivity : AppCompatActivity() {
 
@@ -147,20 +147,89 @@ class HouseDetailsActivity : AppCompatActivity() {
             .addOnSuccessListener { documents ->
                 roomList.clear()
 
+                if (documents.isEmpty) {
+                    roomAdapter.notifyDataSetChanged()
+                    ui.tvNoRooms.visibility = View.VISIBLE
+                    ui.recyclerRooms.visibility = View.GONE
+                    return@addOnSuccessListener
+                }
+
+                val totalRooms = documents.size()
+                var processedRooms = 0
+
                 for (document in documents) {
                     val room = document.toObject(Room::class.java)
                     room.id = document.id
-                    roomList.add(room)
-                }
 
-                roomAdapter.notifyDataSetChanged()
+                    db.collection("houses").document(houseId)
+                        .collection("rooms").document(room.id)
+                        .collection("windows")
+                        .get()
+                        .addOnSuccessListener { windowDocs ->
+                            room.windowCount = windowDocs.size()
 
-                if (roomList.isEmpty()) {
-                    ui.tvNoRooms.visibility = View.VISIBLE
-                    ui.recyclerRooms.visibility = View.GONE
-                } else {
-                    ui.tvNoRooms.visibility = View.GONE
-                    ui.recyclerRooms.visibility = View.VISIBLE
+                            db.collection("houses").document(houseId)
+                                .collection("rooms").document(room.id)
+                                .collection("floorSpaces")
+                                .get()
+                                .addOnSuccessListener { floorDocs ->
+                                    room.floorCount = floorDocs.size()
+
+                                    roomList.add(room)
+                                    processedRooms++
+
+                                    if (processedRooms == totalRooms) {
+                                        roomAdapter.notifyDataSetChanged()
+
+                                        if (roomList.isEmpty()) {
+                                            ui.tvNoRooms.visibility = View.VISIBLE
+                                            ui.recyclerRooms.visibility = View.GONE
+                                        } else {
+                                            ui.tvNoRooms.visibility = View.GONE
+                                            ui.recyclerRooms.visibility = View.VISIBLE
+                                        }
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    room.floorCount = 0
+                                    roomList.add(room)
+                                    processedRooms++
+
+                                    if (processedRooms == totalRooms) {
+                                        roomAdapter.notifyDataSetChanged()
+
+                                        if (roomList.isEmpty()) {
+                                            ui.tvNoRooms.visibility = View.VISIBLE
+                                            ui.recyclerRooms.visibility = View.GONE
+                                        } else {
+                                            ui.tvNoRooms.visibility = View.GONE
+                                            ui.recyclerRooms.visibility = View.VISIBLE
+                                        }
+                                    }
+
+                                    Toast.makeText(this, "Error loading floor count: ${e.message}", Toast.LENGTH_LONG).show()
+                                }
+                        }
+                        .addOnFailureListener { e ->
+                            room.windowCount = 0
+                            room.floorCount = 0
+                            roomList.add(room)
+                            processedRooms++
+
+                            if (processedRooms == totalRooms) {
+                                roomAdapter.notifyDataSetChanged()
+
+                                if (roomList.isEmpty()) {
+                                    ui.tvNoRooms.visibility = View.VISIBLE
+                                    ui.recyclerRooms.visibility = View.GONE
+                                } else {
+                                    ui.tvNoRooms.visibility = View.GONE
+                                    ui.recyclerRooms.visibility = View.VISIBLE
+                                }
+                            }
+
+                            Toast.makeText(this, "Error loading window count: ${e.message}", Toast.LENGTH_LONG).show()
+                        }
                 }
             }
             .addOnFailureListener { e ->

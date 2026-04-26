@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
 
     <LinearLayout
         android:id="@+id/main"
@@ -13,39 +15,42 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp">
+            android:layout_marginBottom="24dp">
 
             <ImageButton
                 android:id="@+id/btnBack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentStart="true"
                 android:background="@android:color/transparent"
-                android:src="@android:drawable/ic_media_previous"
-                android:contentDescription="Back" />
+                android:contentDescription="Back"
+                android:padding="4dp"
+                android:src="@drawable/ic_arrow_back_custom"
+                android:tint="@color/textPrimary" />
 
             <Button
                 android:id="@+id/btnEditRoom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/PrimaryButton"
+                android:layout_width="88dp"
+                android:layout_height="44dp"
                 android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/primary"
                 android:text="Edit" />
 
             <TextView
                 android:id="@+id/tvTitle"
+                style="@style/ScreenTitle"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_toEndOf="@id/btnBack"
-                android:layout_toStartOf="@id/btnEditRoom"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_toEndOf="@id/btnBack"
+                android:layout_toStartOf="@id/btnEditRoom"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:maxLines="1"
-                android:text="Living Room"
-                android:textSize="20sp"
-                android:textStyle="bold" />
+                android:text="Living Room" />
         </RelativeLayout>
 
         <LinearLayout
@@ -53,23 +58,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="24dp"
-            android:background="@android:drawable/editbox_background"
+            android:background="@drawable/card_background"
+            android:elevation="3dp"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="18dp">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="16dp">
+                android:paddingBottom="16dp">
 
-                <ImageView
-                    android:id="@+id/imgRoomPhoto"
-                    android:layout_width="80dp"
-                    android:layout_height="80dp"
-                    android:src="@android:drawable/ic_menu_camera"
-                    android:contentDescription="Room Photo Placeholder" />
+                <LinearLayout
+                    android:layout_width="150dp"
+                    android:layout_height="150dp"
+                    android:background="@drawable/input_background"
+                    android:gravity="center"
+                    android:padding="6dp">
+
+                    <ImageView
+                        android:id="@+id/imgRoomPhoto"
+                        android:layout_width="138dp"
+                        android:layout_height="138dp"
+                        android:contentDescription="Room Photo Placeholder"
+                        android:scaleType="centerCrop"
+                        android:src="@android:drawable/ic_menu_camera" />
+                </LinearLayout>
 
                 <TextView
                     android:id="@+id/tvNoPhoto"
@@ -77,16 +92,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
                     android:text="No photo selected"
-                    android:textSize="16sp" />
+                    android:textColor="@color/textSecondary"
+                    android:textSize="15sp" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tvRoomName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
+                android:layout_marginBottom="6dp"
                 android:text="Living Room"
-                android:textSize="20sp"
+                android:textColor="@color/textPrimary"
+                android:textSize="22sp"
                 android:textStyle="bold" />
 
             <TextView
@@ -94,25 +111,29 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Labour cost: $50"
-                android:textSize="18sp" />
+                android:textColor="@color/textSecondary"
+                android:textSize="17sp" />
         </LinearLayout>
 
         <TextView
             android:id="@+id/tvWindowsTitle"
+            style="@style/SectionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Windows"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:text="Windows" />
 
         <TextView
             android:id="@+id/tvNoWindows"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/card_background"
+            android:elevation="1dp"
+            android:gravity="center"
+            android:padding="16dp"
             android:text="No windows yet"
-            android:textSize="16sp"
-            android:layout_marginBottom="12dp" />
+            android:textColor="@color/textSecondary"
+            android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerWindows"
@@ -124,27 +145,32 @@
 
         <Button
             android:id="@+id/btnAddWindow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ Add Window"
-            android:layout_marginBottom="24dp" />
+            style="@style/PrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/primary"
+            android:text="+ Add Window" />
 
         <TextView
             android:id="@+id/tvFloorSpacesTitle"
+            style="@style/SectionTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Floor Spaces"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="12dp" />
+            android:text="Floor Spaces" />
 
         <TextView
             android:id="@+id/tvNoFloorSpaces"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:background="@drawable/card_background"
+            android:elevation="1dp"
+            android:gravity="center"
+            android:padding="16dp"
             android:text="No floor spaces yet"
-            android:textSize="16sp"
-            android:layout_marginBottom="12dp" />
+            android:textColor="@color/textSecondary"
+            android:textSize="16sp" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerFloorSpaces"
@@ -156,16 +182,20 @@
 
         <Button
             android:id="@+id/btnAddFloorSpace"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="+ Add Floor Space"
-            android:layout_marginBottom="24dp" />
+            style="@style/PrimaryButton"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="@color/primary"
+            android:text="+ Add Floor Space" />
 
         <Button
             android:id="@+id/btnDeleteRoom"
+            style="@style/PrimaryButton"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete" />
+            android:layout_height="50dp"
+            android:backgroundTint="@color/error"
+            android:text="Delete Room" />
 
     </LinearLayout>
 </ScrollView>

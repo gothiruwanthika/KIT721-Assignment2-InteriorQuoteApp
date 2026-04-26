@@ -23,14 +23,19 @@ class HouseAdapter(
         holder.ui.tvCustomerName.text = house.customerName
 
         val cityPart = if (house.city.isNotBlank()) ", ${house.city}" else ""
-        holder.ui.tvHouseDetails.text = "${house.addressLine1}$cityPart | no rooms"
+
+        val roomText = when (house.roomCount) {
+            0 -> "no rooms"
+            1 -> "1 room"
+            else -> "${house.roomCount} rooms"
+        }
+
+        holder.ui.tvHouseDetails.text = "${house.addressLine1}$cityPart | $roomText"
 
         holder.ui.root.setOnClickListener {
             onHouseClick(house)
         }
     }
 
-    override fun getItemCount(): Int {
-        return houses.size
-    }
+    override fun getItemCount(): Int = houses.size
 }

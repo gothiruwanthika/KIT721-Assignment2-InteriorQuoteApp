@@ -2,78 +2,70 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="20dp"
-    android:background="@android:drawable/editbox_background"
-    android:orientation="vertical">
+    android:layout_marginBottom="16dp"
+    android:background="@drawable/card_background"
+    android:elevation="3dp"
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <TextView
-        android:id="@+id/tvRoomName"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="14dp"
-        android:text="Living Room"
-        android:textSize="22sp"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CCCCCC" />
+        <CheckBox
+            android:id="@+id/cbIncludeRoom"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/tvRoomName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:text="Living Room"
+            android:textColor="@color/textPrimary"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/tvWindowLines"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="16dp"
-        android:text="Window 1 - 1200mm × 1500mm   $90"
-        android:textSize="16sp" />
+        android:layout_marginTop="14dp"
+        android:text="Window 1 - Standard Roller Blind - White - 1200mm × 1500mm - $90"
+        android:textColor="@color/textPrimary"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tvFloorSpaceLines"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="8dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="14dp"
-        android:text="Floor Space 1 - 3500mm × 4000mm   $1400"
-        android:textSize="16sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CCCCCC" />
+        android:layout_marginTop="10dp"
+        android:text="Floor Space 1 - Premium Wool Carpet - Charcoal - 3500mm × 4000mm - $1400"
+        android:textColor="@color/textPrimary"
+        android:textSize="15sp" />
 
     <TextView
         android:id="@+id/tvRoomLabourCost"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="14dp"
+        android:layout_marginTop="14dp"
         android:text="Labour Cost: $50"
-        android:textSize="18sp" />
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#CCCCCC" />
+        android:textColor="@color/textSecondary"
+        android:textSize="17sp"
+        android:textStyle="bold" />
 
     <TextView
         android:id="@+id/tvRoomTotal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingStart="16dp"
-        android:paddingTop="14dp"
-        android:paddingEnd="16dp"
-        android:paddingBottom="16dp"
+        android:layout_marginTop="10dp"
         android:text="Room Total: $1540"
+        android:textColor="@color/primary"
         android:textSize="20sp"
         android:textStyle="bold" />
 

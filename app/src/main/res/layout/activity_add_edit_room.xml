@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,117 +18,139 @@
 
             <ImageButton
                 android:id="@+id/btnBack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentStart="true"
                 android:background="@android:color/transparent"
-                android:src="@android:drawable/ic_media_previous"
-                android:contentDescription="Back" />
+                android:contentDescription="Back"
+                android:padding="4dp"
+                android:src="@drawable/ic_arrow_back_custom"
+                android:tint="@color/textPrimary" />
 
             <TextView
                 android:id="@+id/tvTitle"
+                style="@style/ScreenTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="New Room"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:text="New Room" />
 
             <Button
                 android:id="@+id/btnSaveRoom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/PrimaryButton"
+                android:layout_width="88dp"
+                android:layout_height="44dp"
                 android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/primary"
                 android:text="Save" />
         </RelativeLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Room Name *"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/etRoomName"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="e.g., Living Room"
-            android:inputType="textCapWords"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/tvRoomNameError"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Room name is required"
-            android:textColor="#D32F2F"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Labour Cost (AUD) *"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/etLabourCost"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="e.g., 50"
-            android:inputType="numberDecimal"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/tvLabourCostError"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Labour cost is required"
-            android:textColor="#D32F2F"
-            android:visibility="gone"
-            android:layout_marginBottom="24dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Room Photo"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginBottom="16dp" />
-
         <LinearLayout
-            android:id="@+id/layoutPhotoPlaceholder"
             android:layout_width="match_parent"
-            android:layout_height="220dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/card_background"
+            android:elevation="3dp"
             android:orientation="vertical"
-            android:gravity="center"
-            android:background="@android:drawable/editbox_background"
-            android:padding="20dp">
-
-            <ImageView
-                android:id="@+id/imgRoomPhotoPlaceholder"
-                android:layout_width="64dp"
-                android:layout_height="64dp"
-                android:src="@android:drawable/ic_menu_camera"
-                android:contentDescription="Room Photo Placeholder" />
+            android:padding="18dp">
 
             <TextView
-                android:id="@+id/tvNoPhoto"
+                style="@style/FormLabel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="No photo selected"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                android:layout_marginTop="16dp" />
+                android:text="Room Name *" />
 
-            <Button
-                android:id="@+id/btnAddPhoto"
+            <EditText
+                android:id="@+id/etRoomName"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/input_background"
+                android:hint="e.g., Living Room"
+                android:inputType="textCapWords"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvRoomNameError"
+                style="@style/ErrorText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Add Photo"
-                android:layout_marginTop="16dp" />
+                android:text="Room name is required" />
+
+            <TextView
+                style="@style/FormLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Labour Cost (AUD) *" />
+
+            <EditText
+                android:id="@+id/etLabourCost"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/input_background"
+                android:hint="e.g., 50"
+                android:inputType="numberDecimal"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvLabourCostError"
+                style="@style/ErrorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Labour cost is required" />
+
+            <TextView
+                style="@style/FormLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Room Photo" />
+
+            <LinearLayout
+                android:id="@+id/layoutPhotoPlaceholder"
+                android:layout_width="match_parent"
+                android:layout_height="220dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/input_background"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="20dp">
+
+                <ImageView
+                    android:id="@+id/imgRoomPhotoPlaceholder"
+                    android:layout_width="90dp"
+                    android:layout_height="90dp"
+                    android:contentDescription="Room Photo Placeholder"
+                    android:scaleType="centerCrop"
+                    android:src="@android:drawable/ic_menu_camera" />
+
+                <TextView
+                    android:id="@+id/tvNoPhoto"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="14dp"
+                    android:text="No photo selected"
+                    android:textColor="@color/textSecondary"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/btnAddPhoto"
+                    style="@style/PrimaryButton"
+                    android:layout_width="140dp"
+                    android:layout_height="44dp"
+                    android:layout_marginTop="16dp"
+                    android:backgroundTint="@color/primary"
+                    android:text="Add Photo" />
+            </LinearLayout>
+
         </LinearLayout>
 
     </LinearLayout>

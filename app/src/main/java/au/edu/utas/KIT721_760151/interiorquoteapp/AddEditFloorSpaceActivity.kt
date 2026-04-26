@@ -20,12 +20,15 @@ class AddEditFloorSpaceActivity : AppCompatActivity() {
     private var isEditMode: Boolean = false
 
     private var selectedProductName: String = ""
+    private var applyToAllSelection: Boolean = false
 
     private val productSelectionLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
                 selectedProductName = data?.getStringExtra("selectedProductName") ?: ""
+                applyToAllSelection = data?.getBooleanExtra("applyToAllSelection", false) ?: false
+
                 ui.tvSelectedProduct.text = if (selectedProductName.isBlank()) {
                     "No product selected"
                 } else {
@@ -155,8 +158,12 @@ class AddEditFloorSpaceActivity : AppCompatActivity() {
             .collection("floorSpaces")
             .add(floorSpaceData)
             .addOnSuccessListener {
-                Toast.makeText(this, "Floor space saved successfully", Toast.LENGTH_SHORT).show()
-                finish()
+                if (applyToAllSelection) {
+                    applyProductToAllFloorSpaces()
+                } else {
+                    Toast.makeText(this, "Floor space saved successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error saving floor space: ${e.message}", Toast.LENGTH_LONG).show()
@@ -236,11 +243,43 @@ class AddEditFloorSpaceActivity : AppCompatActivity() {
                 )
             )
             .addOnSuccessListener {
-                Toast.makeText(this, "Floor space updated successfully", Toast.LENGTH_SHORT).show()
-                finish()
+                if (applyToAllSelection) {
+                    applyProductToAllFloorSpaces()
+                } else {
+                    Toast.makeText(this, "Floor space updated successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error updating floor space: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun applyProductToAllFloorSpaces() {
+        val db = Firebase.firestore
+
+        db.collection("houses").document(houseId)
+            .collection("rooms").document(roomId)
+            .collection("floorSpaces")
+            .get()
+            .addOnSuccessListener { documents ->
+                val batch = db.batch()
+
+                for (document in documents) {
+                    batch.update(document.reference, "productName", selectedProductName)
+                }
+
+                batch.commit()
+                    .addOnSuccessListener {
+                        Toast.makeText(this, "Product applied to all floor spaces in this room", Toast.LENGTH_SHORT).show()
+                        finish()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(this, "Error applying product to all floor spaces: ${e.message}", Toast.LENGTH_LONG).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading floor spaces: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 }

@@ -8,5 +8,6 @@ data class House(
     var addressLine2: String = "",
     var city: String = "",
     var postalCode: String = "",
-    var email: String = ""
+    var email: String = "",
+    var roomCount: Int = 0
 )

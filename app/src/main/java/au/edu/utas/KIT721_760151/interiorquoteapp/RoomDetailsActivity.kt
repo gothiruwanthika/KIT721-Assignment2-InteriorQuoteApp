@@ -1,10 +1,14 @@
 package au.edu.utas.KIT721_760151.interiorquoteapp
 
+import android.app.Dialog
 import android.content.Intent
 import android.graphics.BitmapFactory
 import android.os.Bundle
 import android.util.Base64
+import android.view.LayoutInflater
 import android.view.View
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -19,6 +23,7 @@ class RoomDetailsActivity : AppCompatActivity() {
     private lateinit var ui: ActivityRoomDetailsBinding
     private var houseId: String = ""
     private var roomId: String = ""
+    private var roomImageBase64: String = ""
 
     private lateinit var windowAdapter: WindowAdapter
     private val windowList = mutableListOf<Window>()
@@ -77,6 +82,17 @@ class RoomDetailsActivity : AppCompatActivity() {
         ui.btnDeleteRoom.setOnClickListener {
             showDeleteConfirmation()
         }
+
+        ui.imgRoomPhoto.setOnClickListener {
+            if (roomImageBase64.isNotBlank()) {
+                val intent = Intent(this, RoomImagePreviewActivity::class.java)
+                intent.putExtra("roomName", ui.tvRoomName.text.toString())
+                intent.putExtra("imageBase64", roomImageBase64)
+                startActivity(intent)
+            } else {
+                Toast.makeText(this, "No image to preview", Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     override fun onResume() {
@@ -98,6 +114,8 @@ class RoomDetailsActivity : AppCompatActivity() {
                     val roomName = document.getString("name") ?: ""
                     val labourCost = document.getDouble("labourCost") ?: 0.0
                     val imageBase64 = document.getString("imageBase64") ?: ""
+
+                    roomImageBase64 = imageBase64
 
                     ui.tvTitle.text = roomName
                     ui.tvRoomName.text = roomName
@@ -272,18 +290,35 @@ class RoomDetailsActivity : AppCompatActivity() {
     }
 
     private fun showWindowOptionsDialog(window: Window) {
-        val options = arrayOf("Edit", "Delete", "Cancel")
+        val dialog = Dialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_item_actions, null)
+        dialog.setContentView(view)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        AlertDialog.Builder(this)
-            .setTitle(window.name)
-            .setItems(options) { dialog, which ->
-                when (which) {
-                    0 -> openEditWindow(window)
-                    1 -> showDeleteWindowConfirmation(window)
-                    2 -> dialog.dismiss()
-                }
-            }
-            .show()
+        val tvDialogTitle = view.findViewById<TextView>(R.id.tvDialogTitle)
+        val tvDialogMessage = view.findViewById<TextView>(R.id.tvDialogMessage)
+        val btnDialogEdit = view.findViewById<Button>(R.id.btnDialogEdit)
+        val btnDialogDelete = view.findViewById<Button>(R.id.btnDialogDelete)
+        val tvDialogCancel = view.findViewById<TextView>(R.id.tvDialogCancel)
+
+        tvDialogTitle.text = window.name
+        tvDialogMessage.text = "Choose an action for this window"
+
+        btnDialogEdit.setOnClickListener {
+            dialog.dismiss()
+            openEditWindow(window)
+        }
+
+        btnDialogDelete.setOnClickListener {
+            dialog.dismiss()
+            showDeleteWindowConfirmation(window)
+        }
+
+        tvDialogCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun openEditWindow(window: Window) {
@@ -328,18 +363,35 @@ class RoomDetailsActivity : AppCompatActivity() {
     }
 
     private fun showFloorSpaceOptionsDialog(floorSpace: FloorSpace) {
-        val options = arrayOf("Edit", "Delete", "Cancel")
+        val dialog = Dialog(this)
+        val view = LayoutInflater.from(this).inflate(R.layout.dialog_item_actions, null)
+        dialog.setContentView(view)
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
 
-        AlertDialog.Builder(this)
-            .setTitle(floorSpace.name)
-            .setItems(options) { dialog, which ->
-                when (which) {
-                    0 -> openEditFloorSpace(floorSpace)
-                    1 -> showDeleteFloorSpaceConfirmation(floorSpace)
-                    2 -> dialog.dismiss()
-                }
-            }
-            .show()
+        val tvDialogTitle = view.findViewById<TextView>(R.id.tvDialogTitle)
+        val tvDialogMessage = view.findViewById<TextView>(R.id.tvDialogMessage)
+        val btnDialogEdit = view.findViewById<Button>(R.id.btnDialogEdit)
+        val btnDialogDelete = view.findViewById<Button>(R.id.btnDialogDelete)
+        val tvDialogCancel = view.findViewById<TextView>(R.id.tvDialogCancel)
+
+        tvDialogTitle.text = floorSpace.name
+        tvDialogMessage.text = "Choose an action for this floor space"
+
+        btnDialogEdit.setOnClickListener {
+            dialog.dismiss()
+            openEditFloorSpace(floorSpace)
+        }
+
+        btnDialogDelete.setOnClickListener {
+            dialog.dismiss()
+            showDeleteFloorSpaceConfirmation(floorSpace)
+        }
+
+        tvDialogCancel.setOnClickListener {
+            dialog.dismiss()
+        }
+
+        dialog.show()
     }
 
     private fun openEditFloorSpace(floorSpace: FloorSpace) {

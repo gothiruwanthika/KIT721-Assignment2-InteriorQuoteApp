@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background"
+    android:fillViewport="true">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -16,186 +18,227 @@
 
             <ImageButton
                 android:id="@+id/btnBack"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
                 android:layout_alignParentStart="true"
                 android:background="@android:color/transparent"
-                android:src="@android:drawable/ic_media_previous"
-                android:contentDescription="Back" />
+                android:contentDescription="Back"
+                android:padding="4dp"
+                android:src="@drawable/ic_arrow_back_custom"
+                android:tint="@color/textPrimary" />
 
             <TextView
                 android:id="@+id/tvFormTitle"
+                style="@style/ScreenTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:text="New House"
-                android:textSize="28sp"
-                android:textStyle="bold" />
+                android:text="New House" />
 
             <Button
                 android:id="@+id/btnSaveHouse"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                style="@style/PrimaryButton"
+                android:layout_width="88dp"
+                android:layout_height="44dp"
                 android:layout_alignParentEnd="true"
+                android:backgroundTint="@color/primary"
                 android:text="Save" />
         </RelativeLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Customer Name *"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/etCustomerName"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="e.g., Gothami Jayasingha"
-            android:inputType="textPersonName"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/tvCustomerNameError"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Customer name is required"
-            android:textColor="#D32F2F"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact Number *"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/etContactNumber"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="e.g., 0403346783"
-            android:inputType="phone"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/tvContactNumberError"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Contact number is required"
-            android:textColor="#D32F2F"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Address Line 1 *"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/etAddressLine1"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="e.g., 12 Collins St, Hobart"
-            android:inputType="textPostalAddress"
-            android:layout_marginTop="8dp" />
-
-        <TextView
-            android:id="@+id/tvAddressLine1Error"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Address line 1 is required"
-            android:textColor="#D32F2F"
-            android:visibility="gone"
-            android:layout_marginBottom="16dp" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Address Line 2 (Optional)"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/etAddressLine2"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="e.g., Floor 4"
-            android:inputType="textPostalAddress"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="16dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
+            android:background="@drawable/card_background"
+            android:elevation="3dp"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                style="@style/FormLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customer Name *" />
+
+            <EditText
+                android:id="@+id/etCustomerName"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/input_background"
+                android:hint="e.g., Gothami Jayasingha"
+                android:inputType="textPersonName"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvCustomerNameError"
+                style="@style/ErrorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Customer name is required" />
+
+            <TextView
+                style="@style/FormLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact Number *" />
+
+            <EditText
+                android:id="@+id/etContactNumber"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/input_background"
+                android:hint="e.g., 0403346783"
+                android:inputType="phone"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvContactNumberError"
+                style="@style/ErrorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Contact number is required" />
+
+            <TextView
+                style="@style/FormLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address Line 1 *" />
+
+            <EditText
+                android:id="@+id/etAddressLine1"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/input_background"
+                android:hint="e.g., 12 Collins St, Hobart"
+                android:inputType="textPostalAddress"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvAddressLine1Error"
+                style="@style/ErrorText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address line 1 is required" />
+
+            <TextView
+                style="@style/FormLabel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Address Line 2 (Optional)" />
+
+            <EditText
+                android:id="@+id/etAddressLine2"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="6dp"
+                android:layout_marginBottom="16dp"
+                android:background="@drawable/input_background"
+                android:hint="e.g., Floor 4"
+                android:inputType="textPostalAddress"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:textSize="16sp" />
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginEnd="8dp">
+                android:layout_marginBottom="16dp"
+                android:orientation="horizontal">
 
-                <TextView
-                    android:layout_width="wrap_content"
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:text="City"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
 
-                <EditText
-                    android:id="@+id/etCity"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:hint="e.g., West Hobart"
-                    android:inputType="textCapWords"
-                    android:layout_marginTop="8dp" />
+                    <TextView
+                        style="@style/FormLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="City" />
+
+                    <EditText
+                        android:id="@+id/etCity"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/input_background"
+                        android:hint="e.g., West Hobart"
+                        android:inputType="textCapWords"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@color/textPrimary"
+                        android:textColorHint="@color/textHint"
+                        android:textSize="16sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        style="@style/FormLabel"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Postal Code" />
+
+                    <EditText
+                        android:id="@+id/etPostalCode"
+                        android:layout_width="match_parent"
+                        android:layout_height="56dp"
+                        android:layout_marginTop="6dp"
+                        android:background="@drawable/input_background"
+                        android:hint="e.g., 7000"
+                        android:inputType="number"
+                        android:paddingStart="12dp"
+                        android:paddingEnd="12dp"
+                        android:textColor="@color/textPrimary"
+                        android:textColorHint="@color/textHint"
+                        android:textSize="16sp" />
+                </LinearLayout>
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="0dp"
+            <TextView
+                style="@style/FormLabel"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical"
-                android:layout_marginStart="8dp">
+                android:text="Email Address (Optional)" />
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Postal Code"
-                    android:textStyle="bold"
-                    android:textSize="18sp" />
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="6dp"
+                android:background="@drawable/input_background"
+                android:hint="e.g., abc@gmail.com"
+                android:inputType="textEmailAddress"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:textColor="@color/textPrimary"
+                android:textColorHint="@color/textHint"
+                android:textSize="16sp" />
 
-                <EditText
-                    android:id="@+id/etPostalCode"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:hint="e.g., 7000"
-                    android:inputType="number"
-                    android:layout_marginTop="8dp" />
-            </LinearLayout>
         </LinearLayout>
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Email Address (Optional)"
-            android:textStyle="bold"
-            android:textSize="18sp" />
-
-        <EditText
-            android:id="@+id/etEmail"
-            android:layout_width="match_parent"
-            android:layout_height="60dp"
-            android:hint="e.g., abc@gmail.com"
-            android:inputType="textEmailAddress"
-            android:layout_marginTop="8dp"
-            android:layout_marginBottom="24dp" />
 
     </LinearLayout>
 </ScrollView>

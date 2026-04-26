@@ -19,13 +19,22 @@ class AddEditWindowActivity : AppCompatActivity() {
     private var windowId: String = ""
     private var isEditMode: Boolean = false
 
+    private var selectedProductId: String = ""
     private var selectedProductName: String = ""
+    private var selectedProductPricePerSqm: Double = 0.0
+    private var applyToAllSelection: Boolean = false
 
     private val productSelectionLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 val data = result.data
+                selectedProductId = data?.getStringExtra("selectedProductId") ?: ""
                 selectedProductName = data?.getStringExtra("selectedProductName") ?: ""
+                selectedProductPricePerSqm =
+                    data?.getDoubleExtra("selectedProductPricePerSqm", 0.0) ?: 0.0
+                applyToAllSelection =
+                    data?.getBooleanExtra("applyToAllSelection", false) ?: false
+
                 ui.tvSelectedProduct.text = if (selectedProductName.isBlank()) {
                     "No product selected"
                 } else {
@@ -51,7 +60,11 @@ class AddEditWindowActivity : AppCompatActivity() {
             ui.etWindowWidth.setText(intent.getStringExtra("width") ?: "")
             ui.etWindowHeight.setText(intent.getStringExtra("height") ?: "")
 
+            selectedProductId = intent.getStringExtra("selectedProductId") ?: ""
             selectedProductName = intent.getStringExtra("selectedProductName") ?: ""
+            selectedProductPricePerSqm =
+                intent.getDoubleExtra("selectedProductPricePerSqm", 0.0)
+
             ui.tvSelectedProduct.text = if (selectedProductName.isBlank()) {
                 "No product selected"
             } else {
@@ -72,10 +85,30 @@ class AddEditWindowActivity : AppCompatActivity() {
         }
 
         ui.layoutSelectedProduct.setOnClickListener {
+            val width = ui.etWindowWidth.text.toString().trim().toIntOrNull() ?: 0
+            val height = ui.etWindowHeight.text.toString().trim().toIntOrNull() ?: 0
+
+            if (width <= 0) {
+                ui.tvWindowWidthError.text = "Enter a valid width first"
+                ui.tvWindowWidthError.visibility = View.VISIBLE
+                ui.etWindowWidth.requestFocus()
+                return@setOnClickListener
+            }
+
+            if (height <= 0) {
+                ui.tvWindowHeightError.text = "Enter a valid height first"
+                ui.tvWindowHeightError.visibility = View.VISIBLE
+                ui.etWindowHeight.requestFocus()
+                return@setOnClickListener
+            }
+
             val intent = Intent(this, SelectProductActivity::class.java)
             intent.putExtra("selectionType", "window")
             intent.putExtra("houseId", houseId)
             intent.putExtra("roomId", roomId)
+            intent.putExtra("currentWindowWidth", width)
+            intent.putExtra("currentWindowHeight", height)
+            intent.putExtra("currentSelectedProductId", selectedProductId)
             productSelectionLauncher.launch(intent)
         }
     }
@@ -144,7 +177,9 @@ class AddEditWindowActivity : AppCompatActivity() {
             "name" to windowName,
             "width" to width,
             "height" to height,
+            "productId" to selectedProductId,
             "productName" to selectedProductName,
+            "productPricePerSqm" to selectedProductPricePerSqm,
             "houseId" to houseId,
             "roomId" to roomId
         )
@@ -155,8 +190,12 @@ class AddEditWindowActivity : AppCompatActivity() {
             .collection("windows")
             .add(windowData)
             .addOnSuccessListener {
-                Toast.makeText(this, "Window saved successfully", Toast.LENGTH_SHORT).show()
-                finish()
+                if (applyToAllSelection) {
+                    applyProductToAllWindows()
+                } else {
+                    Toast.makeText(this, "Window saved successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error saving window: ${e.message}", Toast.LENGTH_LONG).show()
@@ -232,15 +271,59 @@ class AddEditWindowActivity : AppCompatActivity() {
                     "name" to windowName,
                     "width" to width,
                     "height" to height,
-                    "productName" to selectedProductName
+                    "productId" to selectedProductId,
+                    "productName" to selectedProductName,
+                    "productPricePerSqm" to selectedProductPricePerSqm
                 )
             )
             .addOnSuccessListener {
-                Toast.makeText(this, "Window updated successfully", Toast.LENGTH_SHORT).show()
-                finish()
+                if (applyToAllSelection) {
+                    applyProductToAllWindows()
+                } else {
+                    Toast.makeText(this, "Window updated successfully", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
             }
             .addOnFailureListener { e ->
                 Toast.makeText(this, "Error updating window: ${e.message}", Toast.LENGTH_LONG).show()
+            }
+    }
+
+    private fun applyProductToAllWindows() {
+        val db = Firebase.firestore
+
+        db.collection("houses").document(houseId)
+            .collection("rooms").document(roomId)
+            .collection("windows")
+            .get()
+            .addOnSuccessListener { documents ->
+                val batch = db.batch()
+
+                for (document in documents) {
+                    batch.update(document.reference, "productId", selectedProductId)
+                    batch.update(document.reference, "productName", selectedProductName)
+                    batch.update(document.reference, "productPricePerSqm", selectedProductPricePerSqm)
+                }
+
+                batch.commit()
+                    .addOnSuccessListener {
+                        Toast.makeText(
+                            this,
+                            "Product applied to all windows in this room",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        finish()
+                    }
+                    .addOnFailureListener { e ->
+                        Toast.makeText(
+                            this,
+                            "Error applying product to all windows: ${e.message}",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
+            }
+            .addOnFailureListener { e ->
+                Toast.makeText(this, "Error loading windows: ${e.message}", Toast.LENGTH_LONG).show()
             }
     }
 }

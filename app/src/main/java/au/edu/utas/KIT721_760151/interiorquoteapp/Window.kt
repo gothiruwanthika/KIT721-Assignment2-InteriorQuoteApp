@@ -5,7 +5,10 @@ data class Window(
     var name: String = "",
     var width: Int = 0,
     var height: Int = 0,
-    var productName: String = "",
     var houseId: String = "",
-    var roomId: String = ""
+    var roomId: String = "",
+    var productId: String = "",
+    var productName: String = "",
+    var productPricePerSqm: Double = 0.0,
+    var variantName: String = "Default"
 )
